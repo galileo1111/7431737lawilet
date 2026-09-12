@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guten Morgen</title>
+    <style>
+        /* Modernes, minimalistisches und sehr übersichtliches Design ohne Kitsch */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.8;
+            color: #222;
+            background-color: #fafafa;
+            margin: 0;
+            padding: 60px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Eleganter, schlichter Inhaltscontainer */
+        .content-container {
+            max-width: 600px;
+            width: 100%;
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+            min-height: 320px;
+            position: relative;
+            box-sizing: border-box;
+        }
+
+        /* Dezente Seitenzahl oben rechts */
+        .page-counter {
+            position: absolute;
+            top: 20px;
+            right: 40px;
+            font-size: 14px;
+            color: #888;
+        }
+
+        /* Schöne, größere und undekorierte Überschriften */
+        h1 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #111;
+            margin-top: 0;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #f0f0f0;
+            padding-bottom: 15px;
+        }
+
+        /* Versteckt inaktive Seiten */
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* Radio-Buttons Styling */
+        .options {
+            margin-top: 30px;
+            margin-bottom: 30px;
+        }
+
+        .option-label {
+            display: block;
+            margin-bottom: 16px;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 10px;
+            border: 1px solid #eee;
+            border-radius: 6px;
+            transition: background 0.2s;
+        }
+
+        .option-label:hover {
+            background-color: #f9f9f9;
+        }
+
+        .option-label input {
+            margin-right: 12px;
+        }
+
+        /* Navigation unten */
+        .navigation {
+            margin-top: 30px;
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .nav-btn {
+            background: none;
+            border: none;
+            color: #0066cc;
+            font-size: 16px;
+            cursor: pointer;
+            padding: 5px 10px;
+            transition: color 0.2s;
+        }
+
+        .nav-btn:hover {
+            color: #004499;
+            text-decoration: underline;
+        }
+
+        .nav-btn:disabled {
+            color: #ccc;
+            cursor: not-allowed;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="content-container">
+        <!-- Seitenzahlanzeige -->
+        <div class="page-counter" id="counter-display">Seite 1 von 4</div>
+
+        <!-- SEITE 1 -->
+        <div id="page1" class="page active">
+            <h1>this website is for personal use only</h1>
+            <p>Hi </p>
+            <p>ich hoffe du hast gut geschlafen</p>
+            
+        </div>
+
+        <!-- SEITE 2 -->
+        <div id="page2" class="page">
+            <h1>dansk</h1>
+            <p>hej</p>
+            <p>Jeg håber, du sov godt</p>
+        </div>
+
+        <!-- SEITE 3 -->
+        <div id="page3" class="page">
+            <h1>¯\_(ツ)_/¯</h1>
+            <p>weiter</p>
+        </div>
+
+        <!-- SEITE 4 -->
+        <div id="page4" class="page">
+            <h1></h1>
+            <p>ich will heute ein paar stunden mit dir verbringen und deine zeit beanspruchen</p>
+            
+            <div class="options">
+                <label class="option-label">
+                    <input type="radio" name="kiss-answer" value="ja" onclick="handleAnswer(this)"> Ja
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="kiss-answer" value="nein" onclick="handleAnswer(this)"> Nein?
+                </label>
+            </div>
+        </div>
+
+        <!-- REAKTIONS-SEITE (WENN JA GEKLICKT WURDE) -->
+        <div id="page-success" class="page">
+            <h1>Antwort: <3</h1>
+            <p>hab vielen dank du hast meine stimmng um 48% angehoben</p>
+            <p>schreib mir eine uhrzeit</p>
+            <p>du kannst davon ausgehen dass ich um diese uhrzeit bei dir bin und dich hole</p>
+        </div>
+
+        <!-- REAKTIONS-SEITE (WENN NEIN GEKLICKT WURDE) -->
+        <div id="page-decline" class="page">
+            <h1>Antwort: nein?</h1>
+            <p>.. </p>
+        </div>
+
+        <!-- NAVIGATION UNTEN -->
+        <div class="navigation" id="nav-bar">
+            <button id="btn-back" class="nav-btn" onclick="navigate(-1)" disabled>Zurück</button>
+            <button id="btn-next" class="nav-btn" onclick="navigate(1)">Weiter</button>
+        </div>
+    </div>
+
+    <script>
+        let currentPage = 1;
+        const totalPages = 4;
+
+        function updateUI() {
+            for (let i = 1; i <= totalPages; i++) {
+                document.getElementById(`page${i}`).classList.remove('active');
+            }
+            document.getElementById('page-success').classList.remove('active');
+            document.getElementById('page-decline').classList.remove('active');
+
+            if (currentPage <= totalPages) {
+                document.getElementById(`page${currentPage}`).classList.add('active');
+                document.getElementById('counter-display').style.display = 'block';
+                document.getElementById('counter-display').innerText = `Seite ${currentPage} von ${totalPages}`;
+            }
+
+            document.getElementById('btn-back').disabled = (currentPage === 1);
+            document.getElementById('btn-next').disabled = (currentPage === totalPages);
+            
+            if (currentPage === 4) {
+                document.getElementById('btn-next').style.visibility = 'visible';
+                const radios = document.getElementsByName('kiss-answer');
+                for(let i=0; i<radios.length; i++) radios[i].checked = false;
+            }
+        }
+
+        function navigate(direction) {
+            currentPage += direction;
+            if (currentPage < 1) currentPage = 1;
+            if (currentPage > totalPages) currentPage = totalPages;
+            updateUI();
+        }
+
+        function handleAnswer(element) {
+            document.getElementById('page4').classList.remove('active');
+            document.getElementById('counter-display').style.display = 'none';
+            document.getElementById('btn-next').style.visibility = 'hidden';
+            document.getElementById('btn-back').disabled = false;
+            currentPage = 4;
+
+            if (element.value === 'ja') {
+                document.getElementById('page-success').classList.add('active');
+            } else if (element.value === 'nein') {
+                document.getElementById('page-decline').classList.add('active');
+            }
+        }
+    </script>
+
+</body>
+</html>
